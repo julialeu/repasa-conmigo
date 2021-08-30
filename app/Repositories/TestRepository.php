@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Test;
+use Illuminate\Database\RecordsNotFoundException;
 
 class TestRepository
 {
@@ -23,5 +24,26 @@ class TestRepository
         return $query
             ->get()
             ->all();
+    }
+
+    public function find(int $testId): ?Test
+    {
+        $query = Test::query()
+            ->where('id', '=', $testId);
+
+        return $query
+            ->get()
+            ->first();
+    }
+
+    public function findOrFail(int $testId): Test
+    {
+        $test = $this->find($testId);
+
+        if ($test === null) {
+            throw new RecordsNotFoundException('No test found for id ' . $testId);
+        }
+
+        return $test;
     }
 }

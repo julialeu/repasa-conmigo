@@ -25,7 +25,7 @@ class CreateTestController extends Controller
             $title = $request->input('title');
             $description = $request->input('description');
             $user = Auth::user();
-            $userId = $user->id;
+            $userId = $user->id();
 
             $test = (new Test())
                 ->setTitle($title)
