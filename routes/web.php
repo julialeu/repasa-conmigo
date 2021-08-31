@@ -26,4 +26,5 @@ Route::match(['GET', 'POST'],'/crear-test', CreateTestController::class)->middle
 
 Route::get('/test/{testId}', ShowTestController::class)->middleware(['auth']);
 
+
 require __DIR__.'/auth.php';

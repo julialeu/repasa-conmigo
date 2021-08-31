@@ -17,6 +17,11 @@ class Test extends Model
         return $this->getRelationValue('user');
     }
 
+    public function id(): int
+    {
+        return $this->getAttributeValue('id');
+    }
+
     public function title(): string
     {
         return $this->getAttributeValue('title');

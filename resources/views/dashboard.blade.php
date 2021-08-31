@@ -13,8 +13,8 @@
                 </div>
                 <div class="p-6 bg-white border-b border-gray-200">
                     @foreach($tests as $test)
-                        {{ $test->title() }}
 
+                            <a href="/test/{{ $test->id() }}">{{ $test->title() }}</a>
                         <br>
 
                     @endforeach
