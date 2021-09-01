@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\CreateTestController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DummyController;
 use App\Http\Controllers\ShowTestController;
+use App\Models\Test;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/dummy', DummyController::class);
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,6 +30,7 @@ Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name
 Route::match(['GET', 'POST'],'/crear-test', CreateTestController::class)->middleware(['auth']);
 
 Route::get('/test/{testId}', ShowTestController::class)->middleware(['auth']);
+
 
 
 require __DIR__.'/auth.php';
