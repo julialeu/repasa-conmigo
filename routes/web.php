@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CreateQuestionController;
 use App\Http\Controllers\CreateTestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DummyController;
@@ -30,6 +31,8 @@ Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name
 Route::match(['GET', 'POST'],'/crear-test', CreateTestController::class)->middleware(['auth']);
 
 Route::get('/test/{testId}', ShowTestController::class)->middleware(['auth']);
+
+Route::post('/create-question', CreateQuestionController::class)->middleware(['auth']);
 
 
 
