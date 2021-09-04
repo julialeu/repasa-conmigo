@@ -79,7 +79,7 @@ class Question extends Model
 
     public function setCorrectAnswer(int $correctAnswer): self
     {
-        return $this->setAttribute('correctAnswer', $correctAnswer);
+        return $this->setAttribute('correct_answer', $correctAnswer);
     }
 
     public function testId(): int
@@ -87,8 +87,8 @@ class Question extends Model
         return $this->getAttributeValue('test_id');
     }
 
-    public function setTestId(int $test_id): self
+    public function setTestId(int $testId): self
     {
-        return $this->setAttribute('test_id', $test_id);
+        return $this->setAttribute('test_id', $testId);
     }
 }

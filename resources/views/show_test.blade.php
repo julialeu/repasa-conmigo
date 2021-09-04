@@ -85,6 +85,8 @@
                     <input type="radio" id="4" name="correctAnswer" value="4" required>
                     <label for="4">4</label>
 
+                    <input type="hidden" value="{{ $test->id() }}" name="testId" >
+
                     <div class="flex items-center justify-between mt-6">
 
                         <input
