@@ -74,7 +74,7 @@ class Question extends Model
 
     public function correctAnswer(): int
     {
-        return $this->getAttributeValue('answer4');
+        return (int)$this->getAttributeValue('correct_answer');
     }
 
     public function setCorrectAnswer(int $correctAnswer): self

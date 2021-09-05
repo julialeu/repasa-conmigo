@@ -9,12 +9,50 @@
         </h3>
     </x-slot>
 
+    <style>
+        .green {
+            color: #15803D;
+        }
+    </style>
+
+    @foreach ($questions as $question)
+        <div style="padding-top: 3rem">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg pl-4 pb-8	">
+                    <div style="margin: 10px 40px 0px 5px">
+                        <strong>{{ $question->title() }}</strong>
+                    </div>
+                    <br>
+                    <span class="@if($question->correctAnswer() === 1) green @endif">
+                        {{ $question->answer1()}}
+                    </span>
+                    <br>
+                    <span class="@if($question->correctAnswer() === 2) green @endif">
+                        {{ $question->answer2()}}
+                    </span>
+                    <br>
+                    <span class="@if($question->correctAnswer() === 3) green @endif">
+                        {{ $question->answer3()}}
+                    </span>
+                    <br>
+                    <span class="@if($question->correctAnswer() === 4) green @endif">
+                        {{ $question->answer4()}}
+                    </span>
+                    <br>
+
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight my-4 ml-6">Añade una nueva pregunta</h2>
-                <form  action="/create-question" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form action="/create-question" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     @csrf
 
                     <div class="mb-4">
@@ -85,7 +123,7 @@
                     <input type="radio" id="4" name="correctAnswer" value="4" required>
                     <label for="4">4</label>
 
-                    <input type="hidden" value="{{ $test->id() }}" name="testId" >
+                    <input type="hidden" value="{{ $test->id() }}" name="testId">
 
                     <div class="flex items-center justify-between mt-6">
 
