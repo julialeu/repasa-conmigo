@@ -20,7 +20,10 @@ class DashboardController extends Controller
         $user = Auth::user();
         $userId = $user->id();
 
+
+
         $tests = $this->testRepository->findByUserId($userId);
+
 
         return view('dashboard', ['tests' => $tests]);
     }
