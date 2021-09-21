@@ -43,11 +43,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function id(): int
-    {
-        return $this->getAttributeValue('id');
-    }
-
     public function tests(): HasMany
     {
         return $this->hasMany(Test::class, 'user_id' );
@@ -56,5 +51,15 @@ class User extends Authenticatable
     public function testsList(): array
     {
         return $this->getRelationValue('tests')->all();
+    }
+
+    public function id(): int
+    {
+        return $this->getAttributeValue('id');
+    }
+
+    public function name(): string
+    {
+        return $this->getAttributeValue('name');
     }
 }

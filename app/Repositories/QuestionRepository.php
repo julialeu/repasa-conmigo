@@ -26,6 +26,19 @@ class QuestionRepository
             ->all();
     }
 
+    /**
+     * @param int $testId
+     * @return Question
+     */
+    public function findFirstByTestId(int $testId): Question
+    {
+        $query = Question::query()
+            ->where('test_id', '=', $testId);
+
+        return $query
+            ->first();
+    }
+
     public function find(int $questionId): ?Question
     {
         $query = Question::query()
