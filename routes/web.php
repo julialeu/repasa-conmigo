@@ -4,6 +4,8 @@ use App\Http\Controllers\CreateQuestionController;
 use App\Http\Controllers\CreateTestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DummyController;
+use App\Http\Controllers\ShowCorrectAnswerController;
+use App\Http\Controllers\ShowQuestionController;
 use App\Http\Controllers\ShowTestController;
 use App\Http\Controllers\TakeTestController;
 use App\Models\Test;
@@ -27,17 +29,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->middleware(['auth'])->name('dashboard');
 
 Route::match(['GET', 'POST'],'/crear-test', CreateTestController::class)->middleware(['auth']);
-
-Route::get('/take-test/{testId}',TakeTestController::class)->middleware(['auth']);
-
 
 Route::get('/test/{testId}', ShowTestController::class)->middleware(['auth']);
 
 Route::post('/create-question', CreateQuestionController::class)->middleware(['auth']);
 
+Route::get('/take-test/{testId}',TakeTestController::class)->middleware(['auth']);
+
+Route::get('/trial/{trialId}/{questionId}', ShowQuestionController::class)->middleware(['auth']);
+
+Route::get('/correct-answer/{questionId}', ShowCorrectAnswerController::class)->middleware(['auth']);
 
 
 require __DIR__.'/auth.php';

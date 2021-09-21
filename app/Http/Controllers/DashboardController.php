@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Repositories\TestRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
@@ -15,16 +16,20 @@ class DashboardController extends Controller
         $this->testRepository = $testRepository;
     }
 
-    public function __invoke(Request $request)
+    public function showDashboard(): View
     {
+        /** @var User $user */
         $user = Auth::user();
         $userId = $user->id();
 
-
-
         $tests = $this->testRepository->findByUserId($userId);
 
-
-        return view('dashboard', ['tests' => $tests]);
+        return view(
+            'dashboard',
+           [
+               'tests' => $tests,
+               'username' => $user->name()
+           ]
+        );
     }
 }

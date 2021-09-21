@@ -35,7 +35,7 @@ class ShowTestController
         $userIdOfTest = $test->userId();
 
         if ( $loggedUserId !== $userIdOfTest) {
-            throw new InvalidArgumentException('Parámetros incorrectos, pringao');
+            throw new InvalidArgumentException('Parámetros incorrectos');
         }
 
         $data =  [
