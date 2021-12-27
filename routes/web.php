@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\AnswerQuestionController;
 use App\Http\Controllers\CreateQuestionController;
 use App\Http\Controllers\CreateTestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DummyController;
-use App\Http\Controllers\ShowCorrectAnswerController;
+use App\Http\Controllers\GetCorrectAnswerController;
 use App\Http\Controllers\ShowQuestionController;
 use App\Http\Controllers\ShowTestController;
 use App\Http\Controllers\TakeTestController;
-use App\Models\Test;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,7 +41,8 @@ Route::get('/take-test/{testId}',TakeTestController::class)->middleware(['auth']
 
 Route::get('/trial/{trialId}/{questionId}', ShowQuestionController::class)->middleware(['auth']);
 
-Route::get('/correct-answer/{questionId}', ShowCorrectAnswerController::class)->middleware(['auth']);
+Route::get('/correct-answer/{trialId}/{questionId}/{userSelectedOption}', GetCorrectAnswerController::class)->middleware(['auth']);
 
+Route::post('/api/answer/{trialId}/{questionId}', AnswerQuestionController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';

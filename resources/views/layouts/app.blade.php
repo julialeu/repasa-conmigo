@@ -12,11 +12,12 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" >
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
@@ -28,8 +29,9 @@
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main id="app">
                 {{ $slot }}
+
             </main>
         </div>
     </body>

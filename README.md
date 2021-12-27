@@ -18,3 +18,7 @@ Proyecto personal para crear test de preguntas y respuestas.
 
 php artisan serve
 
+
+## How to Rebuild JS and CSS
+
+npm run watch

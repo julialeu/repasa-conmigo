@@ -18,11 +18,16 @@ class ShowQuestionController extends Controller
     public function __invoke(Request $request)
     {
         $questionId = $request->route('questionId');
+        $trialId = $request->route('trialId');
+
+
         $question = $this->questionRepository->findOrFail($questionId);
+
         return view(
             'show_question',
             [
-                'question' => $question
+                'question' => $question,
+                'trialId' => $trialId
             ]
         );
     }

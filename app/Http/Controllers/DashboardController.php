@@ -33,3 +33,7 @@ class DashboardController extends Controller
         );
     }
 }
+
+// $controller = new DashboardController(new TestRepository());
+// $controller->showDashboard();
+
