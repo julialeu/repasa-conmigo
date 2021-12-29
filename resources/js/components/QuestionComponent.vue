@@ -54,11 +54,45 @@
 
 
                     <button
+                        v-if="isSendAnswerVisible"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         @click="sendAnswer"
                     >
                         Responder
                     </button>
+
+                    <div
+                        v-if="isSuccessLabelVisible"
+                    >
+                        <span class="correct-answer">Respuesta correcta!</span>
+                    </div>
+
+                    <div
+                        v-if="isFailureLabelVisible"
+                    >
+                        <span class="incorrect-answer">Respuesta incorrecta! La correcta era la número {{
+                                correctAnswer
+                            }}</span>
+                    </div>
+
+                    <div
+                        v-if="isNextQuestionButtonVisible"
+                    >
+                        <br>
+                        <button
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            @click="goToNextQuestion"
+                        >
+                            Siguiente
+                        </button>
+                    </div>
+
+                    <div
+                        v-if="isResultVisible"
+                    >
+                        <span>Has terminado el test!</span>
+                    </div>
+
                 </form>
 
             </div>
@@ -68,18 +102,46 @@
 
 <script>
 export default {
-    props: [
-        'question',
-        'answer1',
-        'answer2',
-        'answer3',
-        'answer4',
-        'trialId',
-        'questionId'
-    ],
+    props: {
+        question: {
+            type: [String],
+            required: true
+        },
+        answer1: {
+            type: [String],
+            required: true
+        },
+        answer2: {
+            type: [String],
+            required: true
+        },
+        answer3: {
+            type: [String],
+            required: true
+        },
+        answer4: {
+            type: [String],
+            required: true
+        },
+        trialId: {
+            type: [Number],
+            required: true
+        },
+        questionId: {
+            type: [Number],
+            required: true
+        },
+    },
     data: () => {
         return {
-            selected: ""
+            selected: "",
+            isSendAnswerVisible: true,
+            isSuccessLabelVisible: false,
+            isFailureLabelVisible: false,
+            correctAnswer: null,
+            isNextQuestionButtonVisible: false,
+            nextQuestion: null,
+            isResultVisible: false,
         }
     },
     methods: {
@@ -87,15 +149,15 @@ export default {
             alert('ha hecho click! selected: ' + this.selected);
         },
         sendAnswer: function () {
-            console.log('enviar222')
+            this.isSendAnswerVisible = false
 
             let data = {
                 userAnswer: parseInt(this.selected)
             };
             let url = '/api/answer/' + this.trialId + '/' + this.questionId
             const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-            console.log('csrfToken', csrfToken);
             event.preventDefault()
+
             fetch(url, {
                 method: 'POST',
                 body: JSON.stringify(data),
@@ -105,22 +167,49 @@ export default {
                 },
                 redirect: 'manual'
             })
-                .then(function (response) {
-                    event.preventDefault()
+                .then(response => response.json())
+                .then(data => {
+                        const isCorrectAnswer = data.isCorrectAnswer;
+                        if (isCorrectAnswer) {
+                            this.isSuccessLabelVisible = true;
+                        } else {
+                            this.isFailureLabelVisible = true;
 
-                    // alert('bieeeen')
-                    // if(response.ok) {
-                    //     return response.text()
-                    // } else {
-                    //     throw "Error en la llamada Ajax";
-                    // }
+                            this.correctAnswer = data.correctAnswer
+                        }
 
-                })
+                        this.nextQuestion = data.nextQuestionId
+
+                        if (data.nextQuestionId === null) {
+                            this.isResultVisible = true
+                        } else {
+                            this.isNextQuestionButtonVisible = true
+                        }
+                    }
+                )
                 .catch(function (err) {
                     console.log('Error', err);
                 });
+        },
+        goToNextQuestion: function () {
+            event.preventDefault()
+
+            const targetUrl = '/trial/' + this.trialId + '/' + this.nextQuestion
+            console.log('targetUrl is:' , targetUrl)
+            window.location.href = targetUrl
+
         }
     }
 
 }
 </script>
+
+<style>
+.correct-answer {
+    color: green;
+}
+
+.incorrect-answer {
+    color: red;
+}
+</style>

@@ -3,16 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\TrialQuestion;
+use App\Repositories\QuestionRepository;
+use App\Repositories\TestRepository;
 use App\Repositories\TrialQuestionRepository;
+use App\Repositories\TrialRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use RuntimeException;
 
 class AnswerQuestionController extends Controller
 {
     private TrialQuestionRepository $trialQuestionRepository;
+    private QuestionRepository $questionRepository;
+    private TrialRepository $trialRepository;
 
-    public function __construct(TrialQuestionRepository $trialQuestionRepository) {
+    public function __construct(
+        TrialQuestionRepository $trialQuestionRepository,
+        QuestionRepository $questionRepository,
+        TrialRepository $trialRepository
+
+    ) {
         $this->trialQuestionRepository = $trialQuestionRepository;
+        $this->questionRepository = $questionRepository;
+        $this->trialRepository = $trialRepository;
     }
 
     public function __invoke(Request $request)
@@ -20,19 +34,56 @@ class AnswerQuestionController extends Controller
         $questionId = $request->route('questionId');
         $trialId = $request->route('trialId');
 
-        \Log::info('debug 1');
-        \Log::info($questionId);
-        \Log::info($trialId);
+        // Assert that the answer is not repeated in the same trial
+        $numTrialQuestions = $this->trialQuestionRepository->countByQuestionIdAndTrialId(
+            $questionId,
+            $trialId
+        );
+        // Uncomment when front is ready
+//        if ($numTrialQuestions > 0) {
+//            return new JsonResponse([
+//                'message' => 'La respuesta ya ha sido respondida'
+//            ], 400);
+//        }
+
+        $question = $this->questionRepository->findOrFail($questionId);
+        $correctAnswer = $question->correctAnswer();
+        $payLoad = json_decode($request->getContent(), true);
+        $userAnswer = $payLoad['userAnswer'];
+
+        if ($userAnswer === $correctAnswer) {
+            $isCorrectAnswer = true;
+        } else {
+            $isCorrectAnswer = false;
+        }
 
         $trialQuestion = (new TrialQuestion())
             ->setTrialId($trialId)
-            ->setQuestionId($questionId);
+            ->setQuestionId($questionId)
+            ->setUserAnswer($userAnswer)
+            ->setUserAnswerWasCorrect($isCorrectAnswer);
+        $this->trialQuestionRepository->save($trialQuestion);
 
+        // ----------
 
+        $trial = $this->trialRepository->findOrFail($trialId);
+        $testId = $trial->testId();
+        $nextQuestion = $this->questionRepository->findNextQuestion(
+            $testId,
+            $questionId
+        );
 
-      $data = [
-          'bob' => 'esponja'
-      ];
+        if ($nextQuestion === null) {
+            $nextQuestionId = null;
+        } else {
+            $nextQuestionId = $nextQuestion->id();
+        }
+
+        $data = [
+            'isCorrectAnswer' => $isCorrectAnswer,
+            'correctAnswer' => $correctAnswer,
+            'nextQuestionId' => $nextQuestionId
+        ];
 
         return new JsonResponse($data);
     }

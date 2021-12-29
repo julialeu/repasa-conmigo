@@ -20,7 +20,6 @@ class ShowQuestionController extends Controller
         $questionId = $request->route('questionId');
         $trialId = $request->route('trialId');
 
-
         $question = $this->questionRepository->findOrFail($questionId);
 
         return view(

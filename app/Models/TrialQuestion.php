@@ -64,13 +64,13 @@ class TrialQuestion extends Model
         return $this->setAttribute('user_answer', $userAnswer);
     }
 
-    public function userAnswerWasCorrect(): int
+    public function userAnswerWasCorrect(): bool
     {
         return $this->getAttributeValue('user_answer');
 
     }
 
-    public function setUserAnswerWasCorrect(string $userAnswerWasCorrect): self
+    public function setUserAnswerWasCorrect(bool $userAnswerWasCorrect): self
     {
         return $this->setAttribute('user_answer_was_correct', $userAnswerWasCorrect);
     }

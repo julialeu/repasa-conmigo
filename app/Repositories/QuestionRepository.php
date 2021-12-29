@@ -59,4 +59,19 @@ class QuestionRepository
 
         return $question;
     }
+
+    public function findNextQuestion(int $testId, int $currentQuestionId): ?Question
+    {
+        $query = Question::query()
+            ->where('test_id', '=', $testId)
+            ->where('id', '>', $currentQuestionId)
+            ->limit(1)
+            ->orderBy('id', 'ASC');
+
+        return $query
+            ->get()
+            ->first();
+    }
+
+
 }
