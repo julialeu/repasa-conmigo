@@ -7,6 +7,7 @@ use App\Repositories\QuestionRepository;
 use App\Repositories\TestRepository;
 use App\Repositories\TrialQuestionRepository;
 use App\Repositories\TrialRepository;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -77,9 +78,16 @@ class AnswerQuestionController extends Controller
         );
 
         if ($nextQuestion === null) {
+            // Hemos terminado el test
             $nextQuestionId = null;
             $numCorrectAnswers = $this->trialQuestionRepository->getCorrectAnswers($trialId);
             $numFailedAnswers = $this->trialQuestionRepository->getFailedAnswers($trialId);
+            $startTime = $trial->createdAt();
+            $finishTime = Carbon::now();
+
+            $totalDuration = $finishTime->diffInSeconds($startTime);
+            $timeTaken = gmdate('H:i:s', $totalDuration);
+
         } else {
             $nextQuestionId = $nextQuestion->id();
             $numCorrectAnswers = null;
@@ -92,6 +100,7 @@ class AnswerQuestionController extends Controller
             'nextQuestionId' => $nextQuestionId,
             'numCorrectAnswers' => $numCorrectAnswers,
             'numFailedAnswers' => $numFailedAnswers,
+            'timeTaken' => $timeTaken
 
         ];
 

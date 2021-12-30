@@ -100,6 +100,8 @@
                         <span>{{ numFailedAnswers }} preguntas falladas</span>
                         <br>
                         <span>{{ percentSuccess }} % de acierto</span>
+                        <br>
+                        <span>Tiempo empleado: {{ timeTaken }}</span>
 
                     </div>
 
@@ -155,6 +157,7 @@ export default {
             numCorrectAnswers: null,
             numFailedAnswers: null,
             percentSuccess: null,
+            timeTaken: null
         }
     },
     methods: {
@@ -198,6 +201,7 @@ export default {
                             this.numFailedAnswers = responseData.numFailedAnswers
                             const numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers
                             this.percentSuccess = (responseData.numCorrectAnswers * 100) / numQuestions;
+                            this.timeTaken = responseData.timeTaken
 
                             this.isResultVisible = true
 

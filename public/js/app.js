@@ -3950,6 +3950,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     question: {
@@ -3993,7 +3995,8 @@ __webpack_require__.r(__webpack_exports__);
       isResultVisible: false,
       numCorrectAnswers: null,
       numFailedAnswers: null,
-      percentSuccess: null
+      percentSuccess: null,
+      timeTaken: null
     };
   },
   methods: {
@@ -4038,6 +4041,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.numFailedAnswers = responseData.numFailedAnswers;
           var numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers;
           _this.percentSuccess = responseData.numCorrectAnswers * 100 / numQuestions;
+          _this.timeTaken = responseData.timeTaken;
           _this.isResultVisible = true;
         } else {
           _this.isNextQuestionButtonVisible = true;
@@ -40374,6 +40378,12 @@ var render = function() {
                   _vm._v(" "),
                   _c("span", [
                     _vm._v(_vm._s(_vm.percentSuccess) + " % de acierto")
+                  ]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v("Tiempo empleado: " + _vm._s(_vm.timeTaken))
                   ])
                 ])
               : _vm._e()
