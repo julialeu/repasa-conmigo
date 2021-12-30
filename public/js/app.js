@@ -3940,6 +3940,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     question: {
@@ -3980,7 +3990,10 @@ __webpack_require__.r(__webpack_exports__);
       correctAnswer: null,
       isNextQuestionButtonVisible: false,
       nextQuestion: null,
-      isResultVisible: false
+      isResultVisible: false,
+      numCorrectAnswers: null,
+      numFailedAnswers: null,
+      percentSuccess: null
     };
   },
   methods: {
@@ -4007,19 +4020,24 @@ __webpack_require__.r(__webpack_exports__);
         redirect: 'manual'
       }).then(function (response) {
         return response.json();
-      }).then(function (data) {
-        var isCorrectAnswer = data.isCorrectAnswer;
+      }).then(function (responseData) {
+        var isCorrectAnswer = responseData.isCorrectAnswer;
 
         if (isCorrectAnswer) {
           _this.isSuccessLabelVisible = true;
         } else {
           _this.isFailureLabelVisible = true;
-          _this.correctAnswer = data.correctAnswer;
+          _this.correctAnswer = responseData.correctAnswer;
         }
 
-        _this.nextQuestion = data.nextQuestionId;
+        _this.nextQuestion = responseData.nextQuestionId;
 
-        if (data.nextQuestionId === null) {
+        if (responseData.nextQuestionId === null) {
+          // hemos terminado el test
+          _this.numCorrectAnswers = responseData.numCorrectAnswers;
+          _this.numFailedAnswers = responseData.numFailedAnswers;
+          var numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers;
+          _this.percentSuccess = responseData.numCorrectAnswers * 100 / numQuestions;
           _this.isResultVisible = true;
         } else {
           _this.isNextQuestionButtonVisible = true;
@@ -40331,7 +40349,33 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm.isResultVisible
-              ? _c("div", [_c("span", [_vm._v("Has terminado el test!")])])
+              ? _c("div", { staticClass: "result-box" }, [
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Has terminado el test!")]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(
+                      _vm._s(_vm.numCorrectAnswers) + " preguntas acertadas"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(_vm._s(_vm.numFailedAnswers) + " preguntas falladas")
+                  ]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(_vm._s(_vm.percentSuccess) + " % de acierto")
+                  ])
+                ])
               : _vm._e()
           ]
         )

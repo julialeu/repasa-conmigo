@@ -89,8 +89,18 @@
 
                     <div
                         v-if="isResultVisible"
+                        class="result-box"
                     >
+                        <br>
                         <span>Has terminado el test!</span>
+                        <br>
+                        <br>
+                        <span>{{ numCorrectAnswers }} preguntas acertadas</span>
+                        <br>
+                        <span>{{ numFailedAnswers }} preguntas falladas</span>
+                        <br>
+                        <span>{{ percentSuccess }} % de acierto</span>
+
                     </div>
 
                 </form>
@@ -142,6 +152,9 @@ export default {
             isNextQuestionButtonVisible: false,
             nextQuestion: null,
             isResultVisible: false,
+            numCorrectAnswers: null,
+            numFailedAnswers: null,
+            percentSuccess: null,
         }
     },
     methods: {
@@ -168,20 +181,26 @@ export default {
                 redirect: 'manual'
             })
                 .then(response => response.json())
-                .then(data => {
-                        const isCorrectAnswer = data.isCorrectAnswer;
+                .then(responseData => {
+                        const isCorrectAnswer = responseData.isCorrectAnswer;
                         if (isCorrectAnswer) {
                             this.isSuccessLabelVisible = true;
                         } else {
                             this.isFailureLabelVisible = true;
-
-                            this.correctAnswer = data.correctAnswer
+                            this.correctAnswer = responseData.correctAnswer
                         }
 
-                        this.nextQuestion = data.nextQuestionId
+                        this.nextQuestion = responseData.nextQuestionId
 
-                        if (data.nextQuestionId === null) {
+                        if (responseData.nextQuestionId === null) {
+                            // hemos terminado el test
+                            this.numCorrectAnswers = responseData.numCorrectAnswers
+                            this.numFailedAnswers = responseData.numFailedAnswers
+                            const numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers
+                            this.percentSuccess = (responseData.numCorrectAnswers * 100) / numQuestions;
+
                             this.isResultVisible = true
+
                         } else {
                             this.isNextQuestionButtonVisible = true
                         }
@@ -195,7 +214,7 @@ export default {
             event.preventDefault()
 
             const targetUrl = '/trial/' + this.trialId + '/' + this.nextQuestion
-            console.log('targetUrl is:' , targetUrl)
+            console.log('targetUrl is:', targetUrl)
             window.location.href = targetUrl
 
         }

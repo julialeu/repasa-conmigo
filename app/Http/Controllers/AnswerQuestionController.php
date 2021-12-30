@@ -51,10 +51,13 @@ class AnswerQuestionController extends Controller
         $payLoad = json_decode($request->getContent(), true);
         $userAnswer = $payLoad['userAnswer'];
 
+
         if ($userAnswer === $correctAnswer) {
             $isCorrectAnswer = true;
+
         } else {
             $isCorrectAnswer = false;
+
         }
 
         $trialQuestion = (new TrialQuestion())
@@ -75,14 +78,21 @@ class AnswerQuestionController extends Controller
 
         if ($nextQuestion === null) {
             $nextQuestionId = null;
+            $numCorrectAnswers = $this->trialQuestionRepository->getCorrectAnswers($trialId);
+            $numFailedAnswers = $this->trialQuestionRepository->getFailedAnswers($trialId);
         } else {
             $nextQuestionId = $nextQuestion->id();
+            $numCorrectAnswers = null;
+            $numFailedAnswers = null;
         }
 
         $data = [
             'isCorrectAnswer' => $isCorrectAnswer,
             'correctAnswer' => $correctAnswer,
-            'nextQuestionId' => $nextQuestionId
+            'nextQuestionId' => $nextQuestionId,
+            'numCorrectAnswers' => $numCorrectAnswers,
+            'numFailedAnswers' => $numFailedAnswers,
+
         ];
 
         return new JsonResponse($data);
