@@ -87,11 +87,16 @@ class AnswerQuestionController extends Controller
 
             $totalDuration = $finishTime->diffInSeconds($startTime);
             $timeTaken = gmdate('H:i:s', $totalDuration);
+            $repeatTestId = $trial->testId();
 
         } else {
             $nextQuestionId = $nextQuestion->id();
             $numCorrectAnswers = null;
             $numFailedAnswers = null;
+            $startTime = null;
+            $timeTaken = null;
+            $finishTime = null;
+            $repeatTestId = null;
         }
 
         $data = [
@@ -100,7 +105,8 @@ class AnswerQuestionController extends Controller
             'nextQuestionId' => $nextQuestionId,
             'numCorrectAnswers' => $numCorrectAnswers,
             'numFailedAnswers' => $numFailedAnswers,
-            'timeTaken' => $timeTaken
+            'timeTaken' => $timeTaken,
+            'repeatTestId' => $repeatTestId
 
         ];
 

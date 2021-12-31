@@ -6,6 +6,7 @@ use App\Http\Controllers\CreateTestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DummyController;
 use App\Http\Controllers\GetCorrectAnswerController;
+use App\Http\Controllers\ShowMeTestUserNotLoggedController;
 use App\Http\Controllers\ShowQuestionController;
 use App\Http\Controllers\ShowTestController;
 use App\Http\Controllers\TakeTestController;
@@ -24,10 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dummy', DummyController::class);
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ShowMeTestUserNotLoggedController::class, 'showWelcome']);
 
 Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->middleware(['auth'])->name('dashboard');
 

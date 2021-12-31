@@ -105,6 +105,18 @@
 
                     </div>
 
+                    <div
+                        v-if="isRepeatTestButtonVisible"
+                    >
+                        <br>
+                        <button
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            @click="repeatTest"
+                        >
+                            Repetir test
+                        </button>
+                    </div>
+
                 </form>
 
             </div>
@@ -142,7 +154,8 @@ export default {
         questionId: {
             type: [Number],
             required: true
-        },
+        }
+
     },
     data: () => {
         return {
@@ -157,7 +170,9 @@ export default {
             numCorrectAnswers: null,
             numFailedAnswers: null,
             percentSuccess: null,
-            timeTaken: null
+            timeTaken: null,
+            isRepeatTestButtonVisible: false,
+            repeatTestId: null
         }
     },
     methods: {
@@ -200,10 +215,16 @@ export default {
                             this.numCorrectAnswers = responseData.numCorrectAnswers
                             this.numFailedAnswers = responseData.numFailedAnswers
                             const numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers
-                            this.percentSuccess = (responseData.numCorrectAnswers * 100) / numQuestions;
+                            this.percentSuccess = (responseData.numCorrectAnswers * 100) / numQuestions
+                            this.percentSuccess = Number( (this.percentSuccess).toFixed(2) )
+
                             this.timeTaken = responseData.timeTaken
 
+                            this.repeatTestId = responseData.repeatTestId
+
                             this.isResultVisible = true
+
+                            this.isRepeatTestButtonVisible = true
 
                         } else {
                             this.isNextQuestionButtonVisible = true
@@ -220,8 +241,17 @@ export default {
             const targetUrl = '/trial/' + this.trialId + '/' + this.nextQuestion
             console.log('targetUrl is:', targetUrl)
             window.location.href = targetUrl
+        },
+
+        repeatTest: function () {
+            event.preventDefault()
+
+            const repeatTestUrl = '/take-test/' + this.repeatTestId
+
+            window.location.href = repeatTestUrl
 
         }
+
     }
 
 }

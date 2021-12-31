@@ -47,4 +47,17 @@ class TestRepository
         return $test;
     }
 
+    /**
+     * @return Test[]
+     */
+    public function getLastFiveTests(): array
+    {
+        $query = Test::query()
+            ->limit(5);
+
+        return $query
+            ->get()
+            ->all();
+    }
+
 }

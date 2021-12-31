@@ -36,8 +36,27 @@
                 </div>
             @endif
 
+                <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+
+
+                        <p>Repasa conmigo!</p>
+
+
+
+                </div>
+
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <h1>Repasa Conmigo!</h1>
+                <h3>Últimos 5 tests</h3>
+                @foreach ($tests as $test)
+
+                    <p>{{ $test->title() }}</p>
+
+                @endforeach
+
+            </div>
+            <br>
+            <div>
+
             </div>
         </div>
     </body>

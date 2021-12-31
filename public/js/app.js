@@ -3952,6 +3952,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     question: {
@@ -3996,7 +4008,9 @@ __webpack_require__.r(__webpack_exports__);
       numCorrectAnswers: null,
       numFailedAnswers: null,
       percentSuccess: null,
-      timeTaken: null
+      timeTaken: null,
+      isRepeatTestButtonVisible: false,
+      repeatTestId: null
     };
   },
   methods: {
@@ -4041,8 +4055,11 @@ __webpack_require__.r(__webpack_exports__);
           _this.numFailedAnswers = responseData.numFailedAnswers;
           var numQuestions = responseData.numCorrectAnswers + responseData.numFailedAnswers;
           _this.percentSuccess = responseData.numCorrectAnswers * 100 / numQuestions;
+          _this.percentSuccess = Number(_this.percentSuccess.toFixed(2));
           _this.timeTaken = responseData.timeTaken;
+          _this.repeatTestId = responseData.repeatTestId;
           _this.isResultVisible = true;
+          _this.isRepeatTestButtonVisible = true;
         } else {
           _this.isNextQuestionButtonVisible = true;
         }
@@ -4055,6 +4072,11 @@ __webpack_require__.r(__webpack_exports__);
       var targetUrl = '/trial/' + this.trialId + '/' + this.nextQuestion;
       console.log('targetUrl is:', targetUrl);
       window.location.href = targetUrl;
+    },
+    repeatTest: function repeatTest() {
+      event.preventDefault();
+      var repeatTestUrl = '/take-test/' + this.repeatTestId;
+      window.location.href = repeatTestUrl;
     }
   }
 });
@@ -40385,6 +40407,26 @@ var render = function() {
                   _c("span", [
                     _vm._v("Tiempo empleado: " + _vm._s(_vm.timeTaken))
                   ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isRepeatTestButtonVisible
+              ? _c("div", [
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                      on: { click: _vm.repeatTest }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Repetir test\n                    "
+                      )
+                    ]
+                  )
                 ])
               : _vm._e()
           ]
